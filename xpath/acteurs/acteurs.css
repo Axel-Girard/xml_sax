@@ -1,0 +1,191 @@
+body {
+	background-color: #0066B3;
+	font-family: verdana,sans-serif;
+	font-size: 12pt;
+	color: #003D6B;
+	padding: 2em;
+}
+
+
+/* Le titre de la page résultat */
+
+h1 {
+	font-size:25pt;
+	color: #66BEFF;
+	border-style: solid;
+	padding: 1em;
+	font-weight:bold;
+	font-style:italic;
+	text-align: center;
+}
+
+
+
+/* Titres des différentes parties du document : langage, cours, etc. */
+
+h2 {
+	font-size: 20pt;
+	color: #E6F4FF;
+	font-weight: bold;
+	font-style: italic;
+	border-bottom-style: solid;
+	margin-top: 3em;
+}
+
+
+/* Titres des parties du cours */
+
+h3 {
+	font-size:18pt;
+	color: #66BEFF;
+	font-weight:bolder;
+	font-style:italic;
+}
+
+
+/* Titres des chapitres du cours, elements du langage et noms des sites */
+
+h4 {
+	font-size:15pt;
+	color: #80C9FF;
+	font-weight:bold;
+}
+
+
+/* Titres des sections du cours et attributs dans le langage */
+
+h5 {
+	font-size:12pt;
+	color: #E6F4FF;
+	font-weight:bold;
+	margin-top:1ex;
+	margin-bottom:1ex;
+}
+
+
+/* Titres des sous-sections du cours et valeurs d'attributs dans le langage */
+
+h6 {
+        color: #003D6B;
+	font-size: 12pt;
+	font-weight:bold;
+	font-style: italic;
+}
+
+
+
+div.presentation {
+
+  color: #000000;
+  font-weight:bold;
+  background-color: inherit;
+
+  font-size: 110%;
+
+  text-align: justify;
+
+  margin: 3em 6em 4em 4em;
+
+}
+
+
+
+
+
+
+fieldset.sommaire {
+
+  float: right;
+  margin: 0em 1em 1em 1em;
+  width: 30%;
+
+}
+
+
+legend {
+
+  font-weight:bold;
+  font-variant: small-caps;
+  font-size: 100%;
+
+  color: #3333FF;
+  background-color: inherit;
+
+  padding: 0em 1em 0em 1em;
+  margin: 0em;
+
+}
+
+
+
+strong {
+
+  color: #CCFF66;
+  font-weight:bold;
+}
+
+
+
+div.exemple {
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+
+  color: inherit;
+  background-color: #FFFFCC;
+
+  font-family: monospace;
+
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 2em;
+
+  padding: 1em;
+
+}
+
+
+hr {
+  clear: right;
+  visibility: hidden;
+}
+
+img {
+
+  width: 200px;
+  margin-right: 10%;
+  float: right;
+
+}
+
+
+a:link {
+  color: #000000;
+  background-color: inherit;
+  font-weight:bold;
+}
+
+a:hover {
+  color: #3333FF;
+  background-color: #FFFF33;
+  font-weight:bold;
+}
+
+
+a:active {
+  color: #CC0033;
+  background-color: inherit;
+  font-weight:bold;
+}
+
+a:visited {
+  font-weight:bold;
+}
+
+
+th {
+
+   text-align: left;
+
+}

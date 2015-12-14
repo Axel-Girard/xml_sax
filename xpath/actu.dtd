@@ -1,0 +1,21 @@
+
+<!ELEMENT actu (breve*)>
+
+
+
+<!ELEMENT breve  (titre,texte,photo?,url*)> 
+
+<!ELEMENT titre (#PCDATA)>
+<!ELEMENT texte (#PCDATA)>
+<!ELEMENT photo EMPTY>
+<!ELEMENT url   (#PCDATA)>
+
+<!ATTLIST breve langue (fr|en) #REQUIRED
+                theme (actu|sport|bourse|media) #REQUIRED
+                date CDATA #REQUIRED>
+
+<!ATTLIST photo src CDATA #REQUIRED>
+
+<!ATTLIST url href CDATA #REQUIRED>
+
+

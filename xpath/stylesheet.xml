@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="docbiblio.xsl" ?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+  <xsl:output method="xml" encoding="utf-8" indent="yes"/>
+</xsl:stylesheet>
+
+
+<xsl:template name="modele-prenom" match="prenom">
+ un prénom 
+</xsl:template>

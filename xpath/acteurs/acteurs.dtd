@@ -1,0 +1,34 @@
+
+<!ELEMENT liste_acteurs (acteur*)>
+
+<!ELEMENT acteur (prenom,nom,naissance,nationalite,photo?,site?,biographie)>
+<!ATTLIST acteur id  ID #IMPLIED>
+
+<!ELEMENT nom (#PCDATA)>
+
+<!ELEMENT prenom (#PCDATA)>
+
+<!ELEMENT naissance (#PCDATA)>
+
+<!ELEMENT nationalite (#PCDATA)>
+
+<!ELEMENT photo EMPTY>
+<!ATTLIST photo source CDATA #REQUIRED
+                alt    CDATA #REQUIRED>
+
+<!ELEMENT site EMPTY>
+<!ATTLIST site url CDATA #REQUIRED>
+
+<!ELEMENT biographie (p*)>
+
+<!ELEMENT p (#PCDATA | refacteur | film | realisateur | annee)*>
+
+<!ELEMENT refacteur (#PCDATA)>
+<!ATTLIST refacteur code IDREF #IMPLIED>
+
+<!ELEMENT film (#PCDATA)>
+
+<!ELEMENT realisateur (#PCDATA)>
+
+<!ELEMENT annee (#PCDATA)>
+

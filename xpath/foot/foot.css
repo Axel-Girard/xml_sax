@@ -1,0 +1,212 @@
+
+/* généralités sur le document */
+
+body {
+
+  background-color: #FF9900;
+
+  font-size: 90%;
+  color: #000000;
+
+  font-family : "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
+
+  padding: 1em 1em 1em 1em;
+
+}
+
+
+
+
+/* la mise en page : le corps du document */
+
+div.pagelarge {
+
+  background-color: #FFFFFF;
+  color: inherit;
+
+  text-align: justify;
+
+  margin: 0em;
+
+  padding: 2em;
+
+  border: 1px solid #000000;
+}
+
+
+
+div.encart {
+
+  text-align: justify;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+
+  color: inherit;
+
+  background-color: #FFFF99;
+
+  font-weight:bold;
+  font-size: 110%;
+
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 2em;
+
+  padding: 1em;
+
+}
+
+
+
+
+
+
+/* les liens hypertextes */
+
+a:link {
+  color: #3366CC;
+  background-color: inherit;
+}
+
+a:hover {
+  color: #3333FF;
+  background-color: #FFFF33;
+}
+
+
+a:active {
+  color: #CC0033;
+  background-color: inherit;
+}
+
+a:visited {
+
+}
+
+
+
+
+/* les titres */
+
+h1 {
+
+  color: #FF9900;
+  background-color: inherit;
+
+  text-align: right;
+
+  font-weight:bold;
+  font-variant: small-caps;
+  font-size: 150%;
+  
+  border-bottom: 2px solid #FF9900;
+
+  text-transform: capitalize;
+
+}
+
+
+h2{ 
+
+  font-weight:bold;
+  font-variant: small-caps;
+  font-size: 125%;
+
+  text-align: left;
+
+  color: #FF9900;
+  background-color: inherit;
+
+  margin-top: 3em;	
+  margin-bottom: 2em;	
+
+  border-bottom: 1px solid #FF9900;
+
+}
+
+div.encart h1 { 
+
+  font-weight:bold;
+  font-size: 100%;
+
+  text-align: left;
+
+  color: #3366CC;
+  background-color: inherit;
+
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+
+
+}
+
+
+div.encart li {
+   margin-left : 5em;
+}
+
+
+img { 
+  float: left;
+  margin: 1em 1em 1em 0em;
+}
+
+ul { 
+
+  clear: both;
+}
+
+
+fieldset.sommaire {
+
+  float: right;
+  margin: 0em 1em 1em 1em;
+  width: 30%;
+
+}
+
+.sommaire ul {
+ list-style-image: url(plus_rouge.png);
+}
+
+
+
+/* les tableaux */
+
+table {
+
+  border: 1px solid #000000;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  margin: 1em 0em 1em 0em;
+}
+
+
+th {
+  color: white;
+  font-weight:bold;
+  background-color: #3366CC;
+  border: 1px solid #000000;
+  padding: 0.2em;
+  font-variant: small-caps;
+  font-size: 90%;
+
+}
+
+td {
+  border: 1px dotted #CCCCCC;
+  padding: 0.2em;
+  font-size: 90%;
+}
+
+
+/**/
+
+hr {
+  clear: both;
+  visibility: hidden;
+}

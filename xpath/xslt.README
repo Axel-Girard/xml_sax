@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+# la ligne précédente sert à tromper mon éditeur gedit pour un affichage
+# coloré du code xml
+
+
+# Une sensibilisation à XSLT...
+# 1h20 + 20 min environ
+
+
+# Extensible Stylesheet Language Transformations
+# permet la transformation d'un (ou plusieurs) document(s) XML dit source(s) en 
+# un (ou plusieurs) document(s) cible(s) d'un autre format (éventuellement XML) 
+# les transformations à réaliser sont définies à l'aide de règles/template/modèle
+# le document produit est composé de contenu textuel d'éléments, de valeurs 
+# d'attributs, de copie à l'identique de portion de code XML, d'opérations 
+# (comptage, concaténation de string...) opérées à partir des documents sources 
+# extension .xsl
+# respecte la syntaxe xml !
+
+
+# Exemples d'exécution
+# pas d'extension au fichier produit car le résultat de la transformation 
+# n'est pas nécessairement un document xml
+	xsltproc docbiblio.xsl docbiblio.xml  > output
+
+# ou avec un navigateur web après ajout dans le document xml 
+# démo en fin de séance quand un .xsl sera écrit
+<?xml-stylesheet type="text/xsl" href="docbiblio.xsl" ?>
+
+
+# Racine d'une feuille de transformation
+# définition d'un espace de nom
+# démo avec sans l'élément xsl:output 
+# on peut observer l'encodage produit avec "file -i output"
+# on peut aussi observer ce qui se passe avec un élément sans contenu 
+# "<html></html>"
+# autres valeurs de method : html|text...
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+  <xsl:output method="xml" encoding="utf-8" indent="yes"/>
+      <!-- ... -->
+</xsl:stylesheet>
+
+
+# Modèles implicites par défaut
+# démo avec/sans
+# attention value-of sur attribut ne fonctionne pas...
+# attention value-of sur . semble recopier tout le contenu textuel imbriqué...
+<!-- Règle pour la racine et les éléments -->
+<xsl:template match="/|*">
+  <!-- Traitement récursif des enfants -->
+  <!-- La valeur par défaut de l'attribut select est node() -->
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Règle pour nœuds textuels et les attributs -->
+<xsl:template match="text()|@*">
+  <!-- La valeur textuelle est retournée -->
+  <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- Règle pour les intructions de traitement et les commentaires -->
+<!-- Suppression de ceux-ci car cette règle ne retourne rien -->
+<xsl:template match="processing-instruction()|comment()"/>
+
+
+# Modèle simple de transformation
+# l'attribut name est optionnel
+<xsl:template name="modele-prenom" match="prenom">
+ un prénom 
+</xsl:template>
+
+# On peut y placer des éléments xml non préfixés xsl qui seront dans ce cas 
+affichés en l'état
+# attention les éléments qui ne sont pas xsl doivent respecter la syntaxe xml !
+<xsl:template name="modele-prenom" match="prenom">
+ <b>un prénom </b>
+</xsl:template>
+
+# une expression un peu plus compliquée 
+<xsl:template name="modele-prenom" match="/biblio/livre[@isbn='b2']/auteur/prenom">
+  prenom des auteurs du livre ayant l'isbn b2 de la biblio
+</xsl:template>
+
+
+# Une règle "main"  en tête du document 
+<xsl:template  match="/biblio">
+<HTML>
+  <HEAD>
+  </HEAD>
+  <BODY>
+
+    <xsl:apply-templates select="livre"/>
+
+  </BODY>
+</HTML>
+</xsl:template>
+
+<xsl:template  match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+
+# Récupération du contenu textuel d'un élément
+<xsl:template name="modele-prenom" match="prenom">
+  <xsl:value-of select="."/>  
+</xsl:template>
+
+<xsl:template name="modele-prenom" match="livre/auteur/prenom">
+  <xsl:value-of select="."/>  
+</xsl:template>
+
+<xsl:template name="modele-prenom" match="/">
+  <xsl:value-of select="biblio/livre[@isbn='b2']/auteur/prenom"/>  
+</xsl:template>
+
+
+# Récupération de la valeur d'un attribut
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+
+# Priorité d'exécution des règles :
+si plusieurs règles "matchent" les mêmes noeuds
+alors la plus récèmment importée et définie (la plus basse dans le document) 
+  prône, puis la plus spécifique
+dans l'exemple ci-dessous il faut retirer 'name="modele-prenom"' afin d'éviter 
+des conflits
+démo sans/avec la règle la plus spécifique, en changeant l'ordre des règles
+
+<xsl:template name="modele-prenom" match="/biblio/livre[@isbn='b2']/auteur/prenom">
+  prenom des auteurs du livre ayant l'isbn b2 de la biblio
+</xsl:template>
+
+<xsl:template name="modele-prenom" match="prenom">
+ un prénom 
+</xsl:template>
+
+<xsl:template name="modele-prenom" match="prenom">
+ <b>un prénom </b>
+</xsl:template>
+
+
+
+# Copie d'un élément sans son contenu textuel ni ses attributs ni ses sous éléments
+<xsl:template match="/">
+  <xsl:apply-templates select="//livre"/>
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+  <xsl:copy></xsl:copy>
+</xsl:template>
+
+# et avec copie explicite des attributs et enfants
+<xsl:template name="modele-livre" match="livre">
+    <xsl:copy>
+      <!-- Copie explicite des attributs -->
+      <xsl:copy-of select="@*"/>
+      <!-- Copie explicite des enfants -->
+      <xsl:apply-templates/>
+    </xsl:copy>
+</xsl:template>
+
+et une copie profonde
+<xsl:template match="livre">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
+
+# Opération sur les noeuds récupérés
+<xsl:template name="modele-livre" match="/biblio">
+  <xsl:value-of select="count(livre)" />
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+<xsl:value-of select="position()" /> = <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+
+# insérer directement dans un attribut la valeur d'une expression XPath.
+# parce qu'il est impossible d'écrire <!--  <isbn id=" <xsl:value-of select="@isbn"/>  />  -->
+<xsl:template  match="/biblio/livre">
+  <isbn> <xsl:attribute name="id"><xsl:value-of select="@isbn"/></xsl:attribute> </isbn>
+</xsl:template>
+
+ou bien
+<xsl:template  match="/biblio/livre">
+  <isbn id="{@isbn}"/>
+</xsl:template>
+
+
+# appel de modèles par la description des noeuds auxquels doit être appliquée la règle 
+# ne spécifie pas du tout la règle à appliquer
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+  <xsl:apply-templates select="*/prenom"/>
+</xsl:template>
+
+ou  bien 
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+  <xsl:apply-templates/>
+</xsl:template>
+
+
+# application d'un modèle correspondant à un nom donné 
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+  <xsl:call-template name="modele-prenom"/>
+</xsl:template>
+
+
+
+# différentes formulations :  "xsltien" et procédural
+# démo : les deux règles sur racine avec intervention de l'ordre 
+<xsl:template match="/">
+apply
+  <xsl:apply-templates select="//livre"/>
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+vs.
+
+<xsl:template match="/">
+for
+  <xsl:for-each select="//livre">
+    <xsl:call-template name="modele-livre"/>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+
+# xsl:sort avec xsl:apply-templates 
+<xsl:template match="/">
+apply
+  <xsl:apply-templates select="//livre">
+      <xsl:sort select="nb_tomes"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+# xsl:sort avec xsl:for-each 
+<xsl:template match="/">
+for
+  <xsl:for-each select="//livre">
+    <xsl:sort select="nb_tomes"/>
+    <xsl:call-template name="modele-livre"/>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+</xsl:template>
+
+
+# insérer du texte brut
+<xsl:template name="modele-livre" match="livre">
+  <xsl:value-of select="@isbn"/>  
+ <!-- Virgule après ces éléments -->
+  <xsl:if test="position() != last()">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
+</xsl:template>
+
+# mais aussi
+# caractères spéciaux xml (sous ensemble de html)
+<xsl:text>Texte et entités '&lt;', '&gt;' et '&amp;'</xsl:text>
+
+
+# xsl:choose
+<xsl:choose>
+   <xsl:when test="condition">
+      instructions...
+   </xsl:when>
+   ...
+   <xsl:otherwise>
+      instructions...
+   </xsl:otherwise>
+</xsl:choose>
+
+
+# xsl:variable 
+# xsl:param et xsl:with-param
+# illustrés avec appel récursif
+Prototype de la fonction : boucle($debut, $fin). 
+affiche les nombres de $debut à $fin
+Le "&lt;" bizarre :  on reste en XML, et le "chevron ouvrant" ne peut pas 
+s'écrire tel quel. Il faut l'écrire dans sa forme encodée "&lt;"
+<xsl:template match="/"> 
+  <xsl:variable name="debutinitial">0</xsl:variable>
+  <xsl:variable name="fininitial" select="count(//livre)" />
+
+  <xsl:call-template name="boucle"> 
+      <xsl:with-param name="debut" select="$debutinitial" />
+      <xsl:with-param name="fin" select="$fininitial" /> 
+    </xsl:call-template> 
+</xsl:template>
+
+<xsl:template name="boucle"> 
+	<xsl:param name="debut" select="0" /> 
+	<xsl:param name="fin" select="0" /> 
+	<xsl:text>i = </xsl:text> 
+	<xsl:value-of select="$debut" /> 
+	<br/> 
+	<xsl:if test="$debut &lt; $fin"> 
+
+    <xsl:call-template name="boucle"> 
+      <xsl:with-param name="debut" select="($debut)+1" />
+      <xsl:with-param name="fin" select="$fin" /> 
+    </xsl:call-template> 
+  </xsl:if> 
+</xsl:template>
+
+
+# Utilité de XSLT vis-à-vis de solution de programmation via sax ou dom
++ navigateur web importe un processeur
++ texte, déclaratif et externalisé du code donc plus maintenable
+en pratique histoire de compétence et de contexte d'utilisation
+
+# TODO
+  * mettre à jour de 1.0 à 2.0 http://www.w3.org/TR/xslt20/#document
+  * multiple source documents http://www.w3.org/TR/xslt20/#document
+  * multiple Result Documents http://www.w3.org/TR/xslt20/#whats-new-in-xslt2 et http://www.w3.org/TR/xslt11/#multiple-output
+  * mieux comprendre le comportement de <xsl:value-of select="."/>
+

@@ -28,6 +28,8 @@ public class Sax {
 		private int indent = 0;
 		private boolean conf = false;
 		private boolean titre = false;
+		private boolean date = false;
+		private int numConference = 0;
 		private ArrayList<Conference> conferences;
 		
 		Trace(){
@@ -40,7 +42,11 @@ public class Sax {
 		
 		public void conf(){
 			for(Conference conference: conferences){
-				System.out.println("'"+conference.getTitre()+"'");
+				System.out.println(conference.getTitre());
+				for(Integer annee: conference.getAnnees()){
+					System.out.print(annee + " ");
+				}
+				System.out.println("");
 			}
 		}
 		
@@ -66,6 +72,11 @@ public class Sax {
 			} else {
 				titre = false;
 			}
+			if(qName.equals("dateDebut")){
+				date = true;
+			} else {
+				date = false;
+			}
 			indent++;
 		}
 		
@@ -83,27 +94,40 @@ public class Sax {
 		
 		public void	characters (char[] ch, int start, int length){
 			printIndent();
+			String str = "";
 			if(titre){
-				System.out.print("titre : ");
-				String titre = "";
 				for(int i = start; i < length + start; i++){
-					titre += ch[i];
+					str += ch[i];
 				}
-				System.out.println(titre);
 
-				boolean nouveau = true;
-				for(Conference conference: conferences){
-					if(nouveau && conference.getTitre().equals(titre)){
-						nouveau = false;
+				if(!Character.isWhitespace(str.charAt(0))){
+					boolean nouveau = true;
+					for(int i = 0; i < conferences.size() && nouveau; i++){
+						if(nouveau && conferences.get(i).getTitre().equals(str)){
+							nouveau = false;
+						}
+						numConference = i;
+					}
+					if(nouveau){
+						conferences.add(new Conference(str));
 					}
 				}
-				if(nouveau){
-					conferences.add(new Conference(titre));
-					//ajouter la date
-				} else {
-					//ajouter la date
+			}
+			
+			if(date){
+				System.out.print("date : ");
+				for(int i = start; i < length + start; i++){
+					str += ch[i];
+				}
+				String[] parts = str.split("-");
+
+				if(!Character.isWhitespace(str.charAt(0))){
+					System.out.println(parts[0] + " " + numConference);
+					conferences.get(numConference).addAnnees(Integer.parseInt(parts[0]));
 				}
 			}
+
+			str = "";
 		}
 	}
 }

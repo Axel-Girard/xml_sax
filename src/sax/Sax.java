@@ -42,6 +42,8 @@ public class Sax {
 		private String acronyme = "";
 		private String nomsPresidents = "";
 		private String lieu = "";
+		private String statistique = "";
+		private int nbArticle = 0;
 
 		Trace(){
 			conferences = new ArrayList<Conference>();
@@ -77,6 +79,7 @@ public class Sax {
 				isConf = true;
 			}
 			if(isConf && qName.equals("titre")){
+				System.out.println("tittre");
 				isTitre = true;
 				isConf = false;
 			} else {
@@ -101,8 +104,19 @@ public class Sax {
 			if(qName.equals("ville")){
 				isLieu = true;
 			}
-			if(qName.equals("statistiques")){
+			if(qName.equals("acceptations")){
 				isStats = true;
+				int length = atts.getLength();
+				// process each attribute
+				for (int i=0; i<length; i++) {
+					String name = atts.getQName(i);
+					if(name.equals("soumissions")){
+						statistique += atts.getValue(i) + " ";
+					}
+				}
+			}
+			if(qName.equals("article")){
+				nbArticle++;
 			}
 			//indent++;
 		}
@@ -124,9 +138,15 @@ public class Sax {
 			if(qName.equals("statistiques")){
 				if(isStats){
 					isStats = false;
+					conferences.get(numConference).addStatistique(statistique);
+					statistique = "";
 				} else {
-					// yolo y'a rien
+					conferences.get(numConference).addStatistique("");
 				}
+			}
+			if(qName.equals("conference")){
+				conferences.get(numConference).addNbArticles(nbArticle);
+				nbArticle = 0;
 			}
 		}
 
@@ -193,6 +213,15 @@ public class Sax {
 				for(int i = start; i < length + start; i++){
 					if(!Character.isWhitespace(ch[i])){
 						lieu += ch[i];
+					}
+				}
+			}
+			
+			if(isStats){
+				for(int i = start; i < length + start; i++){
+					if(!Character.isWhitespace(ch[i])){
+						statistique += ch[i];
+						System.out.println(statistique);
 					}
 				}
 			}

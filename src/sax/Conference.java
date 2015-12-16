@@ -8,6 +8,8 @@ public class Conference {
 	private ArrayList<String> acronymes;
 	private ArrayList<String> noms;
 	private ArrayList<String> lieu;
+	private ArrayList<String> statistiques;
+	private ArrayList<Integer> nbArticles;
 	private String titre;
 	
 	Conference(String titre){
@@ -16,6 +18,8 @@ public class Conference {
 		acronymes = new ArrayList<String>();
 		noms = new ArrayList<String>();
 		lieu = new ArrayList<String>();
+		statistiques = new ArrayList<String>();
+		nbArticles = new ArrayList<Integer>();
 	}
 
 	// ----- ANNEES ------
@@ -86,6 +90,40 @@ public class Conference {
 			this.lieu.remove(string);
 		}
 	}
+	// ----- STATS ------
+	public ArrayList<String> getStatistique() {
+		return statistiques;
+	}
+	public void setStatistique(ArrayList<String> statistique) {
+		this.statistiques = statistique;
+	}
+	public void addStatistique(String...strings){
+		for(String string: strings){
+			this.statistiques.add(string);
+		}
+	}
+	public void removeStatistique(String...strings){
+		for(String string: strings){
+			this.statistiques.remove(string);
+		}
+	}
+	// ----- ANNEES ------
+	public ArrayList<Integer> getNbArticles() {
+		return nbArticles;
+	}
+	public void setNbArticles(ArrayList<Integer> nbArticles) {
+		this.nbArticles = nbArticles;
+	}
+	public void addNbArticles(Integer...integers){
+		for(Integer integer: integers){
+			this.nbArticles.add(integer);
+		}
+	}
+	public void removeNbArticles(Integer...integers){
+		for(Integer integer: integers){
+			this.nbArticles.remove(integer);
+		}
+	}
 	// ----- TITRE ------
 	public String getTitre() {
 		return titre;
@@ -100,7 +138,7 @@ public class Conference {
 		sortAnnees();
 		for(int i = 0; i < tri.length; i++){
 			sorted.add(annees.get(tri[i]));
-			System.out.print(lieu.get(tri[i]) + " ");
+			System.out.print(statistiques.get(tri[i]) + " ");
 		}
 		System.out.println();
 		return sorted;

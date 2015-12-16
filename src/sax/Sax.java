@@ -29,8 +29,12 @@ public class Sax {
 		private boolean isConf = false;
 		private boolean isTitre = false;
 		private boolean isDate = false;
+		private boolean isAcronyme = false;
 		private int numConference = 0;
 		private ArrayList<Conference> conferences;
+
+		private String str = "";
+		private String acronyme = "";
 
 		Trace(){
 			conferences = new ArrayList<Conference>();
@@ -41,7 +45,6 @@ public class Sax {
 		}
 
 		public void indexConferences(){
-// à faire : ordre alphabethique
 			for(Conference conference: conferences){
 				System.out.println(conference.getTitre());
 				for(Integer annee: conference.getAnnees()){
@@ -77,6 +80,11 @@ public class Sax {
 			} else {
 				isDate = false;
 			}
+			if(qName.equals("acronyme")){
+				isAcronyme = true;
+			} else {
+				isAcronyme = false;
+			}
 			//indent++;
 		}
 
@@ -95,7 +103,7 @@ public class Sax {
 
 		public void	characters (char[] ch, int start, int length){
 			printIndent();
-			String str = "";
+			
 			if(isTitre){
 				for(int i = start; i < length + start; i++){
 					str += ch[i];
@@ -112,6 +120,8 @@ public class Sax {
 					if(nouveau){
 						conferences.add(new Conference(str));
 					}
+					conferences.get(numConference).addAcronymes(acronyme);
+					acronyme = "";
 				}
 			}
 			
@@ -123,6 +133,14 @@ public class Sax {
 
 				if(!Character.isWhitespace(str.charAt(0))){
 					conferences.get(numConference).addAnnees(Integer.parseInt(parts[0]));
+				}
+			}
+			
+			if(isAcronyme){
+				for(int i = start; i < length + start; i++){
+					if(!Character.isWhitespace(ch[i])){
+						acronyme += ch[i];
+					}
 				}
 			}
 

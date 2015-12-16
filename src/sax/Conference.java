@@ -6,12 +6,16 @@ public class Conference {
 	private int tri[];
 	private ArrayList<Integer> annees;
 	private ArrayList<String> acronymes;
+	private ArrayList<String> noms;
+	private ArrayList<String> lieu;
 	private String titre;
 	
 	Conference(String titre){
 		this.titre = titre;
 		annees = new ArrayList<Integer>();
 		acronymes = new ArrayList<String>();
+		noms = new ArrayList<String>();
+		lieu = new ArrayList<String>();
 	}
 
 	// ----- ANNEES ------
@@ -35,7 +39,7 @@ public class Conference {
 	public ArrayList<String> getAcronymes() {
 		return acronymes;
 	}
-	public void setcronymes(ArrayList<String> acronymes) {
+	public void setAcronymes(ArrayList<String> acronymes) {
 		this.acronymes = acronymes;
 	}
 	public void addAcronymes(String...strings){
@@ -46,6 +50,40 @@ public class Conference {
 	public void removeAcronymes(String...strings){
 		for(String string: strings){
 			this.acronymes.remove(string);
+		}
+	}
+	// ----- NOMS ------
+	public ArrayList<String> getNoms() {
+		return noms;
+	}
+	public void setNoms(ArrayList<String> noms) {
+		this.noms = noms;
+	}
+	public void addNoms(String...strings){
+		for(String string: strings){
+			this.noms.add(string);
+		}
+	}
+	public void removeNoms(String...strings){
+		for(String string: strings){
+			this.noms.remove(string);
+		}
+	}
+	// ----- NOMS ------
+	public ArrayList<String> getLieu() {
+		return lieu;
+	}
+	public void setLieu(ArrayList<String> lieu) {
+		this.lieu = lieu;
+	}
+	public void addLieu(String...strings){
+		for(String string: strings){
+			this.lieu.add(string);
+		}
+	}
+	public void removeLieu(String...strings){
+		for(String string: strings){
+			this.lieu.remove(string);
 		}
 	}
 	// ----- TITRE ------
@@ -62,8 +100,9 @@ public class Conference {
 		sortAnnees();
 		for(int i = 0; i < tri.length; i++){
 			sorted.add(annees.get(tri[i]));
-			System.out.println(acronymes.get(tri[i]));
+			System.out.print(lieu.get(tri[i]) + " ");
 		}
+		System.out.println();
 		return sorted;
 	}
 	public void sortAnnees(){

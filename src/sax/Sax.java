@@ -25,16 +25,23 @@ public class Sax {
 	}
 
 	private class Trace extends DefaultHandler {
+// Initialiser dans le constructeur
 		//private int indent = 0;
 		private boolean isConf = false;
 		private boolean isTitre = false;
 		private boolean isDate = false;
 		private boolean isAcronyme = false;
+		private boolean isNames = false;
+		private boolean isNamesPresidents = false;
+		private boolean isLieu = false;
+		private boolean isStats = false;
 		private int numConference = 0;
 		private ArrayList<Conference> conferences;
 
 		private String str = "";
 		private String acronyme = "";
+		private String nomsPresidents = "";
+		private String lieu = "";
 
 		Trace(){
 			conferences = new ArrayList<Conference>();
@@ -85,12 +92,42 @@ public class Sax {
 			} else {
 				isAcronyme = false;
 			}
+			if(qName.equals("presidents")){
+				isNames = true;
+			}
+			if(isNames && qName.equals("nom")){
+				isNamesPresidents = true;
+			}
+			if(qName.equals("ville")){
+				isLieu = true;
+			}
+			if(qName.equals("statistiques")){
+				isStats = true;
+			}
 			//indent++;
 		}
 
 		public void	endElement (String uri, String localName, String qName) {
 			//indent--;
 			printIndent();
+			if(qName.equals("presidents")){
+				isNames = false;
+				isNamesPresidents = false;
+				conferences.get(numConference).addNoms(nomsPresidents);
+				nomsPresidents = "";
+			}
+			if(isLieu && qName.equals("pays")){
+				isLieu = false;
+				conferences.get(numConference).addLieu(lieu);
+				lieu = "";
+			}
+			if(qName.equals("statistiques")){
+				if(isStats){
+					isStats = false;
+				} else {
+					// yolo y'a rien
+				}
+			}
 		}
 
 		public void ignorableWhitespace	(char[] ch, int start, int length) { 
@@ -131,15 +168,31 @@ public class Sax {
 				}
 				String[] parts = str.split("-");
 
-				if(!Character.isWhitespace(str.charAt(0))){
+				if(str.length() > 0 && !Character.isWhitespace(str.charAt(0))){
 					conferences.get(numConference).addAnnees(Integer.parseInt(parts[0]));
 				}
 			}
 			
 			if(isAcronyme){
 				for(int i = start; i < length + start; i++){
-					if(!Character.isWhitespace(ch[i])){
+					if(str.length() > 0 && !Character.isWhitespace(ch[i])){
 						acronyme += ch[i];
+					}
+				}
+			}
+			
+			if(isNamesPresidents){
+				for(int i = start; i < length + start; i++){
+					if(!Character.isWhitespace(ch[i])){
+						nomsPresidents += ch[i];
+					}
+				}
+			}
+			
+			if(isLieu){
+				for(int i = start; i < length + start; i++){
+					if(!Character.isWhitespace(ch[i])){
+						lieu += ch[i];
 					}
 				}
 			}

@@ -12,7 +12,7 @@ public class Sax {
 		Sax sax = new Sax();
 		sax.parse();
 	}
-	
+
 	public void parse(){
 		try {
 			Trace tracer = new Trace();
@@ -23,79 +23,80 @@ public class Sax {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private class Trace extends DefaultHandler {
-		private int indent = 0;
-		private boolean conf = false;
-		private boolean titre = false;
-		private boolean date = false;
+		//private int indent = 0;
+		private boolean isConf = false;
+		private boolean isTitre = false;
+		private boolean isDate = false;
 		private int numConference = 0;
 		private ArrayList<Conference> conferences;
-		
+
 		Trace(){
 			conferences = new ArrayList<Conference>();
 		}
-		
+
 		void printIndent() {
 			//for (int i=0; i<indent; i++) System.out.print("­-");
 		}
-		
-		public void conf(){
+
+		public void indexConferences(){
+// à faire : ordre alphabethique
 			for(Conference conference: conferences){
 				System.out.println(conference.getTitre());
 				for(Integer annee: conference.getAnnees()){
 					System.out.print(annee + " ");
 				}
 				System.out.println("");
+				System.out.println(conference.getSortedAnnees());
 			}
 		}
-		
+
 		public void startDocument() {
 			System.out.println("start document");
 		}
-		
+
 		public void endDocument () {
-			System.out.println("end document");
-			conf();
+			System.out.println("end document\n");
+			indexConferences();
 		}
-		
+
 		public void	startElement(String uri, String localName, String qName, Attributes atts) {
 			printIndent();
 			if(qName.equals("conference")){
-				//System.out.println(qName);
-				conf = true;
+				isConf = true;
 			}
-			if(conf && qName.equals("titre")){
-				//System.out.println(qName);
-				titre = true;
-				conf = false;
+			if(isConf && qName.equals("titre")){
+				isTitre = true;
+				isConf = false;
 			} else {
-				titre = false;
+				isTitre = false;
 			}
 			if(qName.equals("dateDebut")){
-				date = true;
+				isDate = true;
 			} else {
-				date = false;
+				isDate = false;
 			}
-			indent++;
+			//indent++;
 		}
-		
+
 		public void	endElement (String uri, String localName, String qName) {
-			indent--;
+			//indent--;
 			printIndent();
 		}
 
 		public void ignorableWhitespace	(char[] ch, int start, int length) { 
 			printIndent();
 		}
+
 		public void processingInstruction (String target, String data) {
 			printIndent();
 		}
-		
+
 		public void	characters (char[] ch, int start, int length){
 			printIndent();
 			String str = "";
-			if(titre){
+			if(isTitre){
 				for(int i = start; i < length + start; i++){
 					str += ch[i];
 				}
@@ -114,15 +115,13 @@ public class Sax {
 				}
 			}
 			
-			if(date){
-				System.out.print("date : ");
+			if(isDate){
 				for(int i = start; i < length + start; i++){
 					str += ch[i];
 				}
 				String[] parts = str.split("-");
 
 				if(!Character.isWhitespace(str.charAt(0))){
-					System.out.println(parts[0] + " " + numConference);
 					conferences.get(numConference).addAnnees(Integer.parseInt(parts[0]));
 				}
 			}
